@@ -15,11 +15,10 @@ public class Server {
         try {
             serverSocket = new ServerSocket(port);
             clients = new ArrayList<>();
-            while (true) {
-                Socket socket = serverSocket.accept();
-                clients.add(socket);
-                new SendMsgThread(socket).start();
-            }
+            Socket socket = serverSocket.accept();
+            clients.add(socket);
+            new SendMsgThread(socket).start();
+            serverSocket.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -36,7 +35,7 @@ public class Server {
         @Override
         public void run() {
             try {
-                File file = new File("." + File.separator + "Exam1" +
+                File file = new File(".." + File.separator + "Exam1" +
                         File.separator + "tmp" + File.separator + "SampleChapter1.pdf");
                 FileInputStream fileInputStream = new FileInputStream(file);
                 BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
@@ -60,7 +59,7 @@ public class Server {
 
 
     public static void main(String[] args) {
-        new Server(12345);
+        new Server(12344);
 
     }
 }

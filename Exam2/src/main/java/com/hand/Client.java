@@ -17,12 +17,12 @@ public class Client {
                 saveDir.mkdir();
             }
             File file = new File(saveDir + File.separator + "SampleChapter1.pdf");
-            FileOutputStream fileOutputStream=new FileOutputStream(file);
-            BufferedOutputStream bufferedOutputStream=new BufferedOutputStream(fileOutputStream);
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileOutputStream);
             byte data[] = new byte[1024];
             int len = 0;
             while ((len = bufferedInputStream.read(data)) != -1) {
-                bufferedOutputStream.write(data,0,len);
+                bufferedOutputStream.write(data, 0, len);
             }
             bufferedOutputStream.flush();
             bufferedOutputStream.close();
@@ -30,6 +30,7 @@ public class Client {
             inputStream.close();
             bufferedInputStream.close();
             socket.close();
+            System.out.println("保存成功！");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -37,8 +38,7 @@ public class Client {
 
     public static void main(String[] args) {
 
-
-        new Client(12345);
+        new Client(12344);
     }
 
 }
