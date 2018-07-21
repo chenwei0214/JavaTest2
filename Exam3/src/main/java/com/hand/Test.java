@@ -31,7 +31,7 @@ public class Test {
 
     public static void saveFile(String str, String fileName) {
         try {
-            File saveDir = new File("." + File.separator + "Exam3" + File.separator + "tmp");
+            File saveDir = new File("." + File.separator + "tmp");
             if (!saveDir.exists()) {
                 saveDir.mkdirs();
             }
@@ -136,7 +136,7 @@ public class Test {
 
     public static void main(String[] args) {
 
-        Test test = new Test(args[0]);
+        Test test = new Test("sh601006");
         test.new MyThread1().start();
         test.new MyThread2().start();
 

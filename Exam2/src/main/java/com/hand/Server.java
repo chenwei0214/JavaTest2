@@ -15,10 +15,11 @@ public class Server {
         try {
             serverSocket = new ServerSocket(port);
             clients = new ArrayList<>();
-            Socket socket = serverSocket.accept();
-            clients.add(socket);
-            new SendMsgThread(socket).start();
-            serverSocket.close();
+            while(true){
+                Socket socket = serverSocket.accept();
+                clients.add(socket);
+                new SendMsgThread(socket).start();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -37,6 +38,9 @@ public class Server {
             try {
                 File file = new File(".." + File.separator + "Exam1" +
                         File.separator + "tmp" + File.separator + "SampleChapter1.pdf");
+
+                System.out.println( file.getAbsoluteFile());
+
                 FileInputStream fileInputStream = new FileInputStream(file);
                 BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
                 OutputStream outputStream = socket.getOutputStream();

@@ -13,6 +13,7 @@ public class Client {
             BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
             File saveDir = new File("." + File.separator + "Exam2" +
                     File.separator + "tmp");
+            System.out.println(saveDir.getAbsolutePath());
             if (!saveDir.exists()) {
                 saveDir.mkdir();
             }

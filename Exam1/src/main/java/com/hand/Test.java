@@ -25,9 +25,9 @@ public class Test {
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             InputStream inputStream = httpURLConnection.getInputStream();
             byte[] data = readInputStream(inputStream);
-            File saveDir = new File("." + File.separator + "Exam1" + File.separator + "tmp");
+            File saveDir = new File("." + File.separator + "tmp");
             if (!saveDir.exists()) {
-                saveDir.mkdir();
+                saveDir.mkdirs();
             }
             File file = new File(saveDir + File.separator + "SampleChapter1.pdf");
             FileOutputStream fos = new FileOutputStream(file);
@@ -38,7 +38,7 @@ public class Test {
             if (inputStream != null) {
                 inputStream.close();
             }
-            System.out.println("done");
+            System.out.println("Exam1 done");
         } catch (Exception e) {
             e.printStackTrace();
         }
