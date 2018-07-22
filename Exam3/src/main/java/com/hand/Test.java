@@ -31,7 +31,9 @@ public class Test {
 
     public static void saveFile(String str, String fileName) {
         try {
-            File saveDir = new File("." + File.separator + "tmp");
+            String rootPath = System.getProperty("user.dir");
+            String saveDirName = rootPath + File.separator + "Exam3" + File.separator + "tmp";
+            File saveDir = new File(saveDirName);
             if (!saveDir.exists()) {
                 saveDir.mkdirs();
             }

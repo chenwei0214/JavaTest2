@@ -14,6 +14,7 @@ public class Test {
         while ((len = bufferedInputStream.read(buffer)) != -1) {
             bos.write(buffer, 0, len);
         }
+        bos.flush();
         bos.close();
         return bos.toByteArray();
     }
@@ -25,7 +26,10 @@ public class Test {
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             InputStream inputStream = httpURLConnection.getInputStream();
             byte[] data = readInputStream(inputStream);
-            File saveDir = new File("." + File.separator + "tmp");
+
+            String rootPath = System.getProperty("user.dir");
+            String saveDirName = rootPath + File.separator + "Exam1" + File.separator + "tmp";
+            File saveDir = new File(saveDirName);
             if (!saveDir.exists()) {
                 saveDir.mkdirs();
             }

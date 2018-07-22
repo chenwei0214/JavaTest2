@@ -2,17 +2,12 @@
 mvn clean;
 mvn install;
 
-cd Exam1;
-java -cp target/Exam1.jar com.hand.Test;
+java -cp ./Exam1/target/Exam1.jar com.hand.Test;
 
-cd ../
-cd Exam3;
-java -cp target/Exam3.jar com.hand.Test sh601006;
+java -cp ./Exam2/target/Exam2.jar com.hand.Server;
+java -cp ./Exam2/target/Exam2.jar com.hand.Client;
 
-cd ../
-cd Exam2;
-java -cp target/Exam2.jar com.hand.Server;
-java -cp target/Exam2.jar com.hand.Client;
+java -cp ./Exam3/target/Exam3.jar com.hand.Test sh601006;
 
 
 

@@ -3,35 +3,44 @@ package com.hand;
 import java.io.*;
 import java.net.Socket;
 
-public class Client {
+public class Client extends Thread {
+    private Integer port;
     private Socket socket;
 
-    public Client(Integer port) {
+    private String saveDirName;
+
+    private String fileName;
+
+    public Client(Integer port, String saveDirName, String fileName) {
+        this.port = port;
+        this.saveDirName = saveDirName;
+        this.fileName = fileName;
         try {
             this.socket = new Socket("127.0.0.1", port);
-            InputStream inputStream = socket.getInputStream();
-            BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
-            File saveDir = new File("." + File.separator + "Exam2" +
-                    File.separator + "tmp");
-            System.out.println(saveDir.getAbsolutePath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void run() {
+
+        try {
+            File saveDir = new File(saveDirName);
             if (!saveDir.exists()) {
-                saveDir.mkdir();
+                saveDir.mkdirs();
             }
-            File file = new File(saveDir + File.separator + "SampleChapter1.pdf");
-            FileOutputStream fileOutputStream = new FileOutputStream(file);
-            BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileOutputStream);
-            byte data[] = new byte[1024];
-            int len = 0;
-            while ((len = bufferedInputStream.read(data)) != -1) {
-                bufferedOutputStream.write(data, 0, len);
-            }
-            bufferedOutputStream.flush();
-            bufferedOutputStream.close();
-            fileOutputStream.close();
+            File newFile = new File(saveDir + File.separator + fileName);
+            FileOutputStream fos = new FileOutputStream(newFile);
+            BufferedOutputStream bos = new BufferedOutputStream(fos);
+            InputStream inputStream = socket.getInputStream();
+            byte[] data = FileUtils.readInputStream(inputStream);
+            bos.write(data);
+            bos.flush();
             inputStream.close();
-            bufferedInputStream.close();
-            socket.close();
-            System.out.println("保存成功！");
+            bos.close();
+            fos.close();
+            System.out.println("下载文件成功！");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -39,7 +48,14 @@ public class Client {
 
     public static void main(String[] args) {
 
-        new Client(12344);
-    }
+        /*String path = Client.class.getClassLoader().getResource("").getPath();
 
+        String saveDirName = new File(path).getParentFile().getParentFile().getPath()+File.separator+"tmp";*/
+
+        String rootPath = System.getProperty("user.dir");
+        String saveDirName=rootPath+File.separator+"Exam2"+File.separator+"tmp";
+        System.out.println(saveDirName);
+        new Client(12345, saveDirName,
+                "SampleChapter1.pdf").start();
+    }
 }

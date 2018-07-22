@@ -1,69 +1,67 @@
 package com.hand;
 
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 
-public class Server {
+public class Server extends Thread {
+
+    private Integer port;
+
+    private String filePath;
+
     private ServerSocket serverSocket;
 
-    private List<Socket> clients;
-
-    public Server(Integer port) {
+    public Server(Integer port, String filePath) {
+        this.port = port;
+        this.filePath = filePath;
         try {
-            serverSocket = new ServerSocket(port);
-            clients = new ArrayList<>();
-            while(true){
-                Socket socket = serverSocket.accept();
-                clients.add(socket);
-                new SendMsgThread(socket).start();
-            }
+            this.serverSocket = new ServerSocket(port);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    class SendMsgThread extends Thread {
 
-        private Socket socket;
+    @Override
+    public void run() {
 
-        public SendMsgThread(Socket socket) {
-            this.socket = socket;
-        }
-
-        @Override
-        public void run() {
+        while (true) {
             try {
-                File file = new File(".." + File.separator + "Exam1" +
-                        File.separator + "tmp" + File.separator + "SampleChapter1.pdf");
-
-                System.out.println( file.getAbsoluteFile());
-
-                FileInputStream fileInputStream = new FileInputStream(file);
-                BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
-                OutputStream outputStream = socket.getOutputStream();
-                BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream);
-                byte data[] = new byte[1024];
-                int len = 0;
-                while ((len = bufferedInputStream.read(data)) != -1) {
-                    bufferedOutputStream.write(data, 0, len);
+                //等待client的请求
+                System.out.println("waiting...");
+                while (true) {
+                    Socket socket = serverSocket.accept();
+                    System.out.println("开始发送文件...");
+                    BufferedOutputStream bos = new BufferedOutputStream(socket.getOutputStream());
+                    FileInputStream fis = new FileInputStream(new File(filePath));
+                    bos.write(FileUtils.readInputStream(fis));
+                    bos.flush();
+                    bos.close();
+                    socket.close();
+                    System.out.println("发送完毕！");
                 }
-                bufferedOutputStream.flush();
-                bufferedOutputStream.close();
-                outputStream.close();
-                fileInputStream.close();
-                socket.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
-
     public static void main(String[] args) {
-        new Server(12344);
 
+       /* System.out.println( System.getProperty("user.dir"));
+
+        System.out.println(Client.class.getClassLoader().getResource("/"));
+
+        String path = Client.class.getClassLoader().getResource("").getPath();
+        String rootPath = new File(path).getParentFile().getParentFile().getParentFile().getPath();*/
+        String rootPath = System.getProperty("user.dir");
+        System.out.println(rootPath);
+        String filePath = rootPath + File.separator + "Exam1" +
+                File.separator + "tmp" + File.separator + "SampleChapter1.pdf";
+        new Server(12345, filePath).start();
     }
 }
